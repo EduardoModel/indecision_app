@@ -1,74 +1,109 @@
-console.log('App.js está funcionando')
+//A classe do React Component tem que ter a primeira letra em maiusculo!
+//Pq é assim que ele diferencia se é um elemento html ou um React Component
+class IndecisionApp extends React.Component {
+	render(){
+		const title = 'Indecision'
+		const subtitle = 'Ponha sua vida nas mãos de um computador'
+		const options = ['Coisa Um', 'Coisa Dois', 'Coisa Três']
+		return(
+			<div>
+				<Header title={title} subtitle={subtitle} />
+				<Action />
+				<Options options={options}/>
+				<AddOption />	
+			</div>
+		)
+	}
+}
+//Pode se passar valores pra dentro dos componentes(props)
+//São como atributos html padrão
+//e transforma num par chave-valor
 
-//JSX - JavaScript XML
-
-const app = {
-	title: 'Indecision App',
-	subtitle: 'Put your life in the hands of a computer',
-	options: []
+class Header extends React.Component {
+	//React Components precisam de um método que precisa ser definido, que é render(), onde ele retorna JSX
+	render() {
+		return (
+			<div>
+				<h1>{this.props.title}</h1>
+				<h2>{this.props.subtitle}</h2>
+			</div>
+		)
+	}
 }
 
-let renderOptions = (options) => {
-	if(options.length > 0){
-		return <p>Aqui estão as opções: {options}</p>
+class Action extends React.Component {
+	handlePick() {
+		alert('handlepick')
 	}
-	else{
-		return <p>Sem opções</p>
+	render(){
+		return (
+			<div>
+				<button onClick={this.handlePick}>O que fazer?</button>
+			</div>
+		)
 	}
 }
 
-const onFormSubmit = (e) => {
-	e.preventDefault() //Evita a pagina recarregar quando submeter o form
 
-	const option = e.target.elements.option.value
+class Options extends React.Component {
+	//Forma pra poder ter acesso ao objeto this
+	//dentro das funções do componente
+	constructor(props) {
+		super(props)
+		this.handleRemoveAll = this.handleRemoveAll.bind(this)
+	}
+	handleRemoveAll() {
+		console.log(this.props.options)
+		//alert('remove tuto!')
+	}
+	render(){
+		return (
+			<div>
+				{this.props.options.map((option) => {
+					return <Option key={option} optionText={option}/>
+				})}
+				<button onClick={this.handleRemoveAll}>Remove tudo</button>
+			</div>
+		)
+	}
+}
 
-	if(option){
-		app.options.push(option)
+class Option extends React.Component{
+	render(){
+		return (
+			<div>
+				<p>{this.props.optionText}</p>
+			</div>
+		)
+	}
+}
+
+class AddOption extends React.Component {
+	handleAddOption(e) {
+		//o e é o event do form
+		e.preventDefault() //Evita a pagina recarregar quando submeter o form
+
+		const option = e.target.elements.option.value.trim()
+
+		if(option){
+			alert(option)
+		}
 		e.target.elements.option.value = ''
 	}
-	renderIndecisionApp()
+	render(){
+		return (
+			<div>
+				<form onSubmit={this.handleAddOption}>
+					<input type="text" name="option" />
+					<button>Adicionar opção</button>
+				</form>
+			</div>
+		)
+	}
 }
 
-const onRemoveAll = () => {
-	app.options = []
-	renderIndecisionApp()
-}
+//O objetivo é compor o JSX com React Components
 
-const onMakeDecision = () => {
-	 const randomNum = Math.floor(Math.random() * app.options.length)
-	 const option = app.options[randomNum]
-	 alert(option)
-}
-
-const appRoot = document.getElementById('app')
-
-
-const renderIndecisionApp = () => {
-	const template = (
-	<div>
-		<h1>{app.title}</h1>
-		{app.subtitle && <p>{app.subtitle}</p>}
-		{app.options.length > 0 ? 'Aqui esta as opções' : 'Sem opções'}
-		<button disabled={app.options.length===0} onClick={onMakeDecision}>O que devo fazer?</button>
-		<button onClick={onRemoveAll}>Remove All</button>
-		<ol>
-		{	/*Atentar que para usar o JS tu tem que botar o código em chaves!*/
-			app.options.map((option) => <li key={option}>{option}</li>)
-		}
-		</ol>
-		<form onSubmit={onFormSubmit}>
-			<input type="text" name="option" />
-			<button>Adicionar opção</button>
-		</form>
-	</div>
-	)
-
-
-	ReactDOM.render(template, appRoot)
-}
-
-renderIndecisionApp()
-
-// babel src/app.js --out-file=public/scripts/app.js --presets=env,react --watch
-
-// live-server public/
+ReactDOM.render(<IndecisionApp />, document.getElementById('app'))
+//Pra poder passar o contexto adiante tu usa o bind(this)
+//De forma pra função que for executar ter acesso ao objeto this

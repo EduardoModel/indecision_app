@@ -1,111 +1,228 @@
 'use strict';
 
-console.log('App.js está funcionando');
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-//JSX - JavaScript XML
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var app = {
-	title: 'Indecision App',
-	subtitle: 'Put your life in the hands of a computer',
-	options: []
-};
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-var renderOptions = function renderOptions(options) {
-	if (options.length > 0) {
-		return React.createElement(
-			'p',
-			null,
-			'Aqui est\xE3o as op\xE7\xF5es: ',
-			options
-		);
-	} else {
-		return React.createElement(
-			'p',
-			null,
-			'Sem op\xE7\xF5es'
-		);
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+//A classe do React Component tem que ter a primeira letra em maiusculo!
+//Pq é assim que ele diferencia se é um elemento html ou um React Component
+var IndecisionApp = function (_React$Component) {
+	_inherits(IndecisionApp, _React$Component);
+
+	function IndecisionApp() {
+		_classCallCheck(this, IndecisionApp);
+
+		return _possibleConstructorReturn(this, (IndecisionApp.__proto__ || Object.getPrototypeOf(IndecisionApp)).apply(this, arguments));
 	}
-};
 
-var onFormSubmit = function onFormSubmit(e) {
-	e.preventDefault(); //Evita a pagina recarregar quando submeter o form
-
-	var option = e.target.elements.option.value;
-
-	if (option) {
-		app.options.push(option);
-		e.target.elements.option.value = '';
-	}
-	renderIndecisionApp();
-};
-
-var onRemoveAll = function onRemoveAll() {
-	app.options = [];
-	renderIndecisionApp();
-};
-
-var onMakeDecision = function onMakeDecision() {
-	var randomNum = Math.floor(Math.random() * app.options.length);
-	var option = app.options[randomNum];
-	alert(option);
-};
-
-var appRoot = document.getElementById('app');
-
-var renderIndecisionApp = function renderIndecisionApp() {
-	var template = React.createElement(
-		'div',
-		null,
-		React.createElement(
-			'h1',
-			null,
-			app.title
-		),
-		app.subtitle && React.createElement(
-			'p',
-			null,
-			app.subtitle
-		),
-		app.options.length > 0 ? 'Aqui esta as opções' : 'Sem opções',
-		React.createElement(
-			'button',
-			{ disabled: app.options.length === 0, onClick: onMakeDecision },
-			'O que devo fazer?'
-		),
-		React.createElement(
-			'button',
-			{ onClick: onRemoveAll },
-			'Remove All'
-		),
-		React.createElement(
-			'ol',
-			null,
-			/*Atentar que para usar o JS tu tem que botar o código em chaves!*/
-			app.options.map(function (option) {
-				return React.createElement(
-					'li',
-					{ key: option },
-					option
-				);
-			})
-		),
-		React.createElement(
-			'form',
-			{ onSubmit: onFormSubmit },
-			React.createElement('input', { type: 'text', name: 'option' }),
-			React.createElement(
-				'button',
+	_createClass(IndecisionApp, [{
+		key: 'render',
+		value: function render() {
+			var title = 'Indecision';
+			var subtitle = 'Ponha sua vida nas mãos de um computador';
+			var options = ['Coisa Um', 'Coisa Dois', 'Coisa Três'];
+			return React.createElement(
+				'div',
 				null,
-				'Adicionar op\xE7\xE3o'
-			)
-		)
-	);
+				React.createElement(Header, { title: title, subtitle: subtitle }),
+				React.createElement(Action, null),
+				React.createElement(Options, { options: options }),
+				React.createElement(AddOption, null)
+			);
+		}
+	}]);
 
-	ReactDOM.render(template, appRoot);
-};
+	return IndecisionApp;
+}(React.Component);
+//Pode se passar valores pra dentro dos componentes(props)
+//São como atributos html padrão
+//e transforma num par chave-valor
 
-renderIndecisionApp();
+var Header = function (_React$Component2) {
+	_inherits(Header, _React$Component2);
 
-// babel src/app.js --out-file=public/scripts/app.js --presets=env,react --watch
+	function Header() {
+		_classCallCheck(this, Header);
 
-// live-server public/
+		return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
+	}
+
+	_createClass(Header, [{
+		key: 'render',
+
+		//React Components precisam de um método que precisa ser definido, que é render(), onde ele retorna JSX
+		value: function render() {
+			return React.createElement(
+				'div',
+				null,
+				React.createElement(
+					'h1',
+					null,
+					this.props.title
+				),
+				React.createElement(
+					'h2',
+					null,
+					this.props.subtitle
+				)
+			);
+		}
+	}]);
+
+	return Header;
+}(React.Component);
+
+var Action = function (_React$Component3) {
+	_inherits(Action, _React$Component3);
+
+	function Action() {
+		_classCallCheck(this, Action);
+
+		return _possibleConstructorReturn(this, (Action.__proto__ || Object.getPrototypeOf(Action)).apply(this, arguments));
+	}
+
+	_createClass(Action, [{
+		key: 'handlePick',
+		value: function handlePick() {
+			alert('handlepick');
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return React.createElement(
+				'div',
+				null,
+				React.createElement(
+					'button',
+					{ onClick: this.handlePick },
+					'O que fazer?'
+				)
+			);
+		}
+	}]);
+
+	return Action;
+}(React.Component);
+
+var Options = function (_React$Component4) {
+	_inherits(Options, _React$Component4);
+
+	//Forma pra poder ter acesso ao objeto this
+	//dentro das funções do componente
+	function Options(props) {
+		_classCallCheck(this, Options);
+
+		var _this4 = _possibleConstructorReturn(this, (Options.__proto__ || Object.getPrototypeOf(Options)).call(this, props));
+
+		_this4.handleRemoveAll = _this4.handleRemoveAll.bind(_this4);
+		return _this4;
+	}
+
+	_createClass(Options, [{
+		key: 'handleRemoveAll',
+		value: function handleRemoveAll() {
+			console.log(this.props.options);
+			//alert('remove tuto!')
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return React.createElement(
+				'div',
+				null,
+				this.props.options.map(function (option) {
+					return React.createElement(Option, { key: option, optionText: option });
+				}),
+				React.createElement(
+					'button',
+					{ onClick: this.handleRemoveAll },
+					'Remove tudo'
+				)
+			);
+		}
+	}]);
+
+	return Options;
+}(React.Component);
+
+var Option = function (_React$Component5) {
+	_inherits(Option, _React$Component5);
+
+	function Option() {
+		_classCallCheck(this, Option);
+
+		return _possibleConstructorReturn(this, (Option.__proto__ || Object.getPrototypeOf(Option)).apply(this, arguments));
+	}
+
+	_createClass(Option, [{
+		key: 'render',
+		value: function render() {
+			return React.createElement(
+				'div',
+				null,
+				React.createElement(
+					'p',
+					null,
+					this.props.optionText
+				)
+			);
+		}
+	}]);
+
+	return Option;
+}(React.Component);
+
+var AddOption = function (_React$Component6) {
+	_inherits(AddOption, _React$Component6);
+
+	function AddOption() {
+		_classCallCheck(this, AddOption);
+
+		return _possibleConstructorReturn(this, (AddOption.__proto__ || Object.getPrototypeOf(AddOption)).apply(this, arguments));
+	}
+
+	_createClass(AddOption, [{
+		key: 'handleAddOption',
+		value: function handleAddOption(e) {
+			//o e é o event do form
+			e.preventDefault(); //Evita a pagina recarregar quando submeter o form
+
+			var option = e.target.elements.option.value.trim();
+
+			if (option) {
+				alert(option);
+			}
+			e.target.elements.option.value = '';
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return React.createElement(
+				'div',
+				null,
+				React.createElement(
+					'form',
+					{ onSubmit: this.handleAddOption },
+					React.createElement('input', { type: 'text', name: 'option' }),
+					React.createElement(
+						'button',
+						null,
+						'Adicionar op\xE7\xE3o'
+					)
+				)
+			);
+		}
+	}]);
+
+	return AddOption;
+}(React.Component);
+
+//O objetivo é compor o JSX com React Components
+
+ReactDOM.render(React.createElement(IndecisionApp, null), document.getElementById('app'));
+//Pra poder passar o contexto adiante tu usa o bind(this)
+//De forma pra função que for executar ter acesso ao objeto this
